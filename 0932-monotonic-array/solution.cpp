@@ -8,6 +8,6 @@ public:
        sort(dec.begin(),dec.end(),greater<int>()); 
       if(inc==nums)return true;
       else if(dec==nums)return true;
-       else return false;
+       return false;
     }
 };
