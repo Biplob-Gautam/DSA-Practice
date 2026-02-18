@@ -2,29 +2,29 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int n = height.size();
-        if (n == 0) return 0;
 
-        vector<int> leftMax(n), rightMax(n);
+        if(n==0) return 0;
 
-        // Compute left max for each index
-        leftMax[0] = height[0];
-        for (int i = 1; i < n; i++) {
-            leftMax[i] = max(leftMax[i - 1], height[i]);
+        vector<int> prefixMax(n), suffixMax(n);
+
+        prefixMax[0] = height[0];
+        for(int i=1; i<n-1; i++){
+            prefixMax[i] = max(prefixMax[i-1], height[i]);
         }
 
-        // Compute right max for each index
-        rightMax[n - 1] = height[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            rightMax[i] = max(rightMax[i + 1], height[i]);
+        suffixMax[n-1] = height[n-1];
+        for(int i=n-2; i>0; i--){
+            suffixMax[i] = max(suffixMax[i+1], height[i]);
         }
 
-        int totalWater = 0;
-        // Calculate trapped water
-        for (int i = 0; i < n; i++) {
-            totalWater += min(leftMax[i], rightMax[i]) - height[i];
+        int total = 0;
+        for(int i=0; i<n; i++){
+            if(height[i] < prefixMax[i]  && height[i] < suffixMax[i]){
+                total += min(prefixMax[i], suffixMax[i]) - height[i];
+            }
         }
 
-        return totalWater;
+        return total;
     }
 };
 
