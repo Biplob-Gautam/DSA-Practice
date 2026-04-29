@@ -1,56 +1,38 @@
 class Solution {
 public:
     int sumSubarrayMins(vector<int>& arr) {
-        int mod=1e9+7;
+        int mod = 1e9+7;
         int n = arr.size();
-        long long nextIndex,prevIndex, noOfSubarray, contri;
-        long long sum =0;
-        vector<int> nseArr(n),psoeeArr(n);
+        stack<int> st;
+        vector<int> nsi(n,-1), psi(n,-1);
 
-        nseArr = nse(arr);
-        psoeeArr = psoee(arr);
+        for(int i =n-1; i>=0; i--){
+            while(!st.empty() && arr[st.top()] >= arr[i]) st.pop();
 
+            if(st.empty()) nsi[i]=n;
+            else nsi[i]=st.top();
+            st.push(i);
+        }
+
+        while(!st.empty()) st.pop();
+
+        for(int i =0; i<n; i++){
+            while(!st.empty() && arr[st.top()] > arr[i]) st.pop();
+
+            if(st.empty()) psi[i]=-1;
+            else psi[i]=st.top();
+            st.push(i);
+        }
+
+        long long sum=0;
         for(int i=0; i<n; i++){
-            nextIndex = nseArr[i] - i;
-            prevIndex = i - psoeeArr[i];
-            noOfSubarray = nextIndex * prevIndex;
-            contri = (noOfSubarray * arr[i] * 1LL) % mod;
-            sum = (sum+contri) % mod;
+            int leftChoice = i - psi[i];
+            int rightChoice = nsi[i] - i;
+            int NoOfSubarrays = leftChoice * rightChoice;
+            long long contri = NoOfSubarrays * (long long)arr[i];
+            sum = (sum + contri) % mod; 
         }
 
         return (int)sum;
-    }
-
-private:
-    vector<int> nse( vector<int> &num){
-        stack<int> st;
-        int n = num.size();
-        vector<int> nse(n);
-
-        for(int i=n-1; i>=0; i--){
-            while(!st.empty() && num[i]<=num[st.top()]) st.pop();
-
-            if(st.empty()) nse[i] = n;
-            else nse[i] = st.top();
-
-            st.push(i);
-        }
-        return nse;
-    }
-
-    vector<int> psoee( vector<int> &num){
-        stack<int> st;
-        int n = num.size();
-        vector<int> psoee(n);
-
-        for(int i=0; i<n; i++){
-            while(!st.empty() && num[i]<num[st.top()]) st.pop();
-
-            if(st.empty()) psoee[i] = -1;
-            else psoee[i] = st.top();
-
-            st.push(i);
-        }
-        return psoee;
     }
 };
