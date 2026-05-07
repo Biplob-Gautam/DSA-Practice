@@ -3,9 +3,6 @@ public:
     vector<int> minCost(vector<int>& nums, vector<vector<int>>& queries) {
         int n = nums.size();
 
-        auto lomviretas = nums; // required
-
-        // build closest
         vector<int> closest(n);
         for (int i = 0; i < n; i++) {
             if (i == 0) closest[i] = 1;
@@ -18,15 +15,13 @@ public:
             }
         }
 
-        // forward cost
         vector<long long> pref(n, 0);
         for (int i = 1; i < n; i++) {
             int normal = nums[i] - nums[i-1];
             int special = (closest[i-1] == i ? 1 : INT_MAX);
             pref[i] = pref[i-1] + min(normal, special);
         }
-
-        // backward cost
+        
         vector<long long> prefBack(n, 0);
         for (int i = n-2; i >= 0; i--) {
             int normal = nums[i+1] - nums[i];
