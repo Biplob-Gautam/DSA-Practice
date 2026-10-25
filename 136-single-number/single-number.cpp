@@ -9,11 +9,7 @@ public:
         // return nums[n-1];
 
         int XOR=0;
-
-        for(int i=0; i<nums.size(); i++){
-            XOR^=nums[i];
-        }
-
+        for(int i=0; i<nums.size(); i++) XOR^=nums[i];
         return XOR;
     }
 };
